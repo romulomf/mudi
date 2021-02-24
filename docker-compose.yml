@@ -1,0 +1,17 @@
+version: '3.8'
+
+services:
+  mudi-database:
+    image: mariadb:latest
+    container_name: mudi-database
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: mudi
+      MYSQL_DATABASE: mudi
+      MYSQL_USER: mudi
+      MYSQL_PASSWORD: mudi
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./mudi-database:/var/lib/mysql
+    network_mode: bridge
