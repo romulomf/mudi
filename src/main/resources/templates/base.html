@@ -3,18 +3,43 @@
 	<meta charset="utf-8">
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
 	<style type="text/css">
+		@font-face {
+			font-family: Handlee;
+			src: local('Handlee'), url(/static/fonts/handlee.ttf) format('ttf');
+		}
 		.logo-container {
 			background-color: #47BCFF;
 			color: #FFFFFF;
 		}
+		.logo {
+			font-family: Handlee, sans-serif;
+			font-size: 2em;
+		}
 	</style>
 </head>
 
-<div th:fragment="logo" class="logo-container mb-3 p-3 d-flex justify-content-between">
-	<span>mudi</span>
-	<span>login</span>
+<div th:fragment="logo">
+	<div class="row">
+		<div class="col logo-container p-3 d-flex justify-content-between">
+			<span class="logo">mudi</span>
+			<span>
+				<a sec:authorize="!isAuthenticated()" href="/login" class="text-light">login</a>
+				<form id="form-login" th:action="@{/logout}" method="post">
+					<a onclick="document.querySelector('#form-login').submit()" sec:authorize="isAuthenticated()" href="#" class="text-light">logout</a>
+				</form>
+			</span>
+		</div>
+	</div>
+	<div class="row" sec:authorize="isAuthenticated()">
+		<div class="col">
+			<nav class="nav">
+				<a th:href="@{/home}" class="nav-link">Home</a>
+				<a th:href="@{/usuario/pedido}" class="nav-link">Meus Pedidos</a>
+			</nav>
+		</div>
+	</div>
 </div>
 
-<div th:fragment="titulo(texto)" class="jumbotron mb-0">
+<div th:fragment="titulo(texto)" class="jumbotron mb-3">
 	<h1 class="display-4" th:text="${texto}"></h1>
 </div>
