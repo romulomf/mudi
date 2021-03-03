@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="pt-br">
+<head th:replace="~{base :: head}"></head>
+<body>
+	<div th:replace="~{base :: logo}"></div>
+	<div id="ofertas" class="container">
+		<div th:replace="~{base :: titulo('Faça sua oferta')}"></div>
+		<div class="card mt-3" v-for="pedido in pedidos">
+			<div class="card-header alert-dark">{{pedido.nome}}</div>
+			<div class="card-body">
+				<div class="row">
+					<div class="col-12 col-sm-8 mb-3">
+						<div>Produto</div>
+						<div><a v-bind:href="pedido.urlProduto">{{pedido.nome}}</a></div>						
+						<div>Descrição</div>
+						<div>
+							<textarea name="descricao" class="form-control" id="" cols="30" rows="5" disabled="disabled">{{pedido.descricao}}</textarea>
+						</div>
+						<div class="row mt-3">
+							<div class="col-md-5">
+								<label>Valor</label>
+								<input type="text" class="form-control" v-model="pedido.valor" v-bind:class="{'is-invalid':pedido.erros.valor != null}" />
+								<div class="invalid-feedback" v-if="pedido.erros.valor">{{pedido.erros.valor}}</div>
+							</div>
+							<div class="col-md-7">
+								<label>Data de Entrega</label>
+								<input type="date" class="form-control" v-model="pedido.dataDeEntrega" v-bind:class="{'is-invalid':pedido.erros.dataDeEntrega != null}" />
+								<div class="invalid-feedback" v-if="pedido.erros.dataDeEntrega">{{pedido.erros.dataDeEntrega}}</div>
+							</div>
+						</div>
+						<div class="mt-3">
+							<label for="comentario">Comentário</label>
+							<textarea name="comentario" class="form-control" id="" cols="30" rows="5" v-model="pedido.comentario"></textarea>
+						</div>
+						<button v-on:click="enviarOferta(pedido)" class="btn btn-success mt-3" type="submit" v-if="pedido.ofertaEnviada">Oferta Enviada</button>
+						<button v-on:click="enviarOferta(pedido)" class="btn btn-primary mt-3" type="submit" v-else>Enviar</button>
+					</div>
+					<div class="col-12 col-sm-4">
+						<img v-bind:src="pedido.urlImagem" class="img-thumbnail" alt="" />
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js" type="text/javascript"></script>
+	<script src="https://unpkg.com/axios/dist/axios.min.js" type="text/javascript"></script>
+	<script type="text/javascript">
+		window.onload = function() {
+			var app = new Vue({
+				el: '#ofertas',
+				data: {
+					pedidos: []
+				},
+				mounted() {
+					axios.get('http://localhost:8080/api/pedidos/aguardando').then(response => {
+						response.data.forEach(pedido => {
+							pedido.ofertaEnviada = false
+							pedido.erros = {
+								valor: null,
+								dataDeEntrega: null
+							};
+						});
+						this.pedidos = response.data
+					})
+				},
+				methods: {
+					enviarOferta: function(pedido) {
+						pedido.erros = {valor: null, dataDeEntrega: null};
+						axios.post('http://localhost:8080/api/ofertas', {
+							"pedidoId": pedido.id,
+							"valor": pedido.valor,
+							"dataDeEntrega": pedido.dataDeEntrega,
+							"comentario": pedido.comentario
+						})
+						.then(response => pedido.ofertaEnviada = true)
+						.catch(error => {
+							error.response.data.errors.forEach(e => {
+								pedido.erros[e.field] = e.defaultMessage;
+							});
+						});
+					}
+				}
+			});
+		}
+	</script>
+</body>
+</html>
