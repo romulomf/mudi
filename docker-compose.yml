@@ -12,6 +12,4 @@ services:
       MYSQL_PASSWORD: mudi
     ports:
       - "3306:3306"
-    volumes:
-      - ./mudi-database:/var/lib/mysql
     network_mode: bridge
