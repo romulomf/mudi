@@ -8,6 +8,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.lang.Nullable;
 import org.springframework.web.servlet.HandlerInterceptor;
 
 public class InterceptadorDeAcessos implements HandlerInterceptor {
@@ -22,7 +23,7 @@ public class InterceptadorDeAcessos implements HandlerInterceptor {
 	}
 
 	@Override
-	public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception {
+	public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, @Nullable Exception ex) throws Exception {
 		Acesso acesso = (Acesso) request.getAttribute("acesso");
 		acesso.setDuracao(Duration.between(acesso.getData(), LocalDateTime.now()));
 		HandlerInterceptor.super.afterCompletion(request, response, handler, ex);

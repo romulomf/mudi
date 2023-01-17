@@ -14,17 +14,15 @@ import br.com.alura.mvc.mudi.dto.RequisicaoNovaOferta;
 import br.com.alura.mvc.mudi.model.Oferta;
 import br.com.alura.mvc.mudi.model.Pedido;
 import br.com.alura.mvc.mudi.repository.PedidoRepository;
+import lombok.NoArgsConstructor;
 
 @RestController
 @RequestMapping("/api/ofertas")
+@NoArgsConstructor
 public class OfertasRest {
 
 	@Autowired
 	private PedidoRepository pedidoRepository;
-
-	public OfertasRest() {
-		// construtor padrão
-	}
 
 	@PostMapping
 	public Oferta criaOferta(@Valid @RequestBody RequisicaoNovaOferta requisicao) {

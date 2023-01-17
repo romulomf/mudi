@@ -12,17 +12,15 @@ import org.springframework.web.bind.annotation.RestController;
 import br.com.alura.mvc.mudi.model.Pedido;
 import br.com.alura.mvc.mudi.model.StatusPedido;
 import br.com.alura.mvc.mudi.repository.PedidoRepository;
+import lombok.NoArgsConstructor;
 
 @RestController
 @RequestMapping("/api/pedidos")
+@NoArgsConstructor
 public class PedidosRest {
 
 	@Autowired
 	private PedidoRepository pedidoRepository;
-
-	public PedidosRest() {
-		// construtor padrão
-	}
 
 	@GetMapping("aguardando")
 	public List<Pedido> getPedidosAguardandoOfertas() {

@@ -8,7 +8,13 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 
 import br.com.alura.mvc.mudi.model.Oferta;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
+@NoArgsConstructor
+@Getter
+@Setter
 public class RequisicaoNovaOferta {
 
 	private Long pedidoId;
@@ -22,42 +28,6 @@ public class RequisicaoNovaOferta {
 	private String dataDeEntrega;
 
 	private String comentario;
-
-	public RequisicaoNovaOferta() {
-		// construtor padrão
-	}
-
-	public Long getPedidoId() {
-		return pedidoId;
-	}
-
-	public void setPedidoId(Long pedidoId) {
-		this.pedidoId = pedidoId;
-	}
-
-	public String getValor() {
-		return valor;
-	}
-
-	public void setValor(String valor) {
-		this.valor = valor;
-	}
-
-	public String getDataDeEntrega() {
-		return dataDeEntrega;
-	}
-
-	public void setDataDeEntrega(String dataDeEntrega) {
-		this.dataDeEntrega = dataDeEntrega;
-	}
-
-	public String getComentario() {
-		return comentario;
-	}
-
-	public void setComentario(String comentario) {
-		this.comentario = comentario;
-	}
 
 	public Oferta toOferta() {
 		Oferta oferta = new Oferta();

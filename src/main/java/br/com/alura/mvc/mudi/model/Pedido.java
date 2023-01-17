@@ -19,7 +19,14 @@ import javax.persistence.OneToMany;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 @Entity
+@NoArgsConstructor
+@Getter
+@Setter
 public class Pedido {
 
 	@Id
@@ -62,87 +69,11 @@ public class Pedido {
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "pedido", fetch = FetchType.LAZY)
 	private List<Oferta> ofertas;
 
-	public Pedido() {
-		// construtor padrão
-	}
-
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
-
-	public String getNome() {
-		return nome;
-	}
-
-	public void setNome(String nome) {
-		this.nome = nome;
-	}
-
-	public BigDecimal getValor() {
-		return valor;
-	}
-
-	public void setValor(BigDecimal valor) {
-		this.valor = valor;
-	}
-
-	public LocalDate getDataDeEntrega() {
-		return dataDeEntrega;
-	}
-
-	public void setDataDeEntrega(LocalDate dataDeEntrega) {
-		this.dataDeEntrega = dataDeEntrega;
-	}
-
-	public String getUrlProduto() {
-		return urlProduto;
-	}
-
-	public void setUrlProduto(String urlProduto) {
-		this.urlProduto = urlProduto;
-	}
-
-	public String getUrlImagem() {
-		return urlImagem;
-	}
-
-	public void setUrlImagem(String urlImagem) {
-		this.urlImagem = urlImagem;
-	}
-
-	public String getDescricao() {
-		return descricao;
-	}
-
-	public void setDescricao(String descricao) {
-		this.descricao = descricao;
-	}
-
 	public synchronized StatusPedido getStatus() {
 		return status;
 	}
 
 	public synchronized void setStatus(StatusPedido status) {
 		this.status = status;
-	}
-
-	public User getUser() {
-		return user;
-	}
-
-	public void setUser(User user) {
-		this.user = user;
-	}
-
-	public List<Oferta> getOfertas() {
-		return ofertas;
-	}
-
-	public void setOfertas(List<Oferta> ofertas) {
-		this.ofertas = ofertas;
 	}
 }
