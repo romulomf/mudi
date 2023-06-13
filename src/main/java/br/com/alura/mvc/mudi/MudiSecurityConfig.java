@@ -22,24 +22,23 @@ public class MudiSecurityConfig {
 	}
 
 	@Bean
-	public BCryptPasswordEncoder bCryptPasswordEncoder() {
+	BCryptPasswordEncoder bCryptPasswordEncoder() {
 		return new BCryptPasswordEncoder();
 	}
 
 	@Bean
-	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-		return http.authorizeRequests()
-				.antMatchers("/home/**").permitAll()
-				.anyRequest().authenticated()
-				.and()
-				.formLogin(form -> form.loginPage("/login").loginProcessingUrl("/login").defaultSuccessUrl("/usuario/pedido", true).permitAll())
-				.logout(logout -> logout.logoutUrl("/logout").logoutSuccessUrl("/home").permitAll())
-				.csrf().disable()
-				.build();
+	SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+		return http.authorizeHttpRequests(requests -> requests
+			.antMatchers("/home/**").permitAll()
+			.anyRequest().authenticated())
+			.formLogin(form -> form.loginPage("/login").loginProcessingUrl("/login").defaultSuccessUrl("/usuario/pedido", true).permitAll())
+			.logout(logout -> logout.logoutUrl("/logout").logoutSuccessUrl("/home").permitAll())
+			.csrf(conf -> conf.disable())
+			.build();
 	}
 
 	@Bean
-	public AuthenticationManager authManager(HttpSecurity http, BCryptPasswordEncoder passwordEncoder, @Autowired DataSource dataSource) throws Exception {
+	AuthenticationManager authManager(HttpSecurity http, BCryptPasswordEncoder passwordEncoder, @Autowired DataSource dataSource) throws Exception {
 		return http.getSharedObject(AuthenticationManagerBuilder.class)
 					.jdbcAuthentication()
 					.dataSource(dataSource)
@@ -49,7 +48,7 @@ public class MudiSecurityConfig {
 	}
 
 	@Bean
-	public WebSecurityCustomizer webSecurityCustomizer() {
+	WebSecurityCustomizer webSecurityCustomizer() {
 		return web -> web.debug(false).ignoring().antMatchers("/login/**");
 	}
 }
