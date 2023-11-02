@@ -1,13 +1,10 @@
 package br.com.alura.mvc.mudi.model;
 
-import java.util.List;
-
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import lombok.Getter;
@@ -15,22 +12,23 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table(name = "users")
+@Table(name = "USERS")
 @NoArgsConstructor
 @Getter
 @Setter
 public class User {
 
 	@Id
-	@Column(name = "username")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "ID")
+	private Long id;
+	
+	@Column(name = "USERNAME")
 	private String username;
 
-	@Column(name = "password")
+	@Column(name = "PASSWORD")
 	private String password;
 
-	@Column(name = "enabled")
+	@Column(name = "ENABLED")
 	private boolean enabled;
-
-	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	private List<Pedido> pedidos;
 }

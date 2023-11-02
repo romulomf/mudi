@@ -4,12 +4,13 @@ services:
   mudi-database:
     image: mariadb:latest
     container_name: mudi-database
-    restart: always
     environment:
       MYSQL_ROOT_PASSWORD: mudi
       MYSQL_DATABASE: mudi
       MYSQL_USER: mudi
       MYSQL_PASSWORD: mudi
+    network_mode: bridge
     ports:
       - "3306:3306"
-    network_mode: bridge
+    volumes:
+      - ./data:/var/lib/mysql
