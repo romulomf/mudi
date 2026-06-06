@@ -1,8 +1,6 @@
 package br.com.alura.mvc.mudi.controller;
 
-import javax.validation.Valid;
-
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -16,39 +14,43 @@ import br.com.alura.mvc.mudi.model.Pedido;
 import br.com.alura.mvc.mudi.model.User;
 import br.com.alura.mvc.mudi.repository.PedidoRepository;
 import br.com.alura.mvc.mudi.repository.UserRepository;
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 
+@RequiredArgsConstructor
 @Controller
 @RequestMapping("/pedido")
 @RequestScope
 public class PedidoController {
 
-	@Autowired
-	private PedidoRepository pedidoRepository;
+	private static final String FORMULARIO = "pedido/formulario";
 
-	@Autowired
-	private UserRepository userRepository;
+	private final PedidoRepository pedidoRepository;
 
-	public PedidoController() {
-		// construtor padrão
-	}
+	private final UserRepository userRepository;
 
 	@GetMapping("formulario")
 	public String formulario(RequisicaoNovoPedido requisicao) {
-		return "pedido/formulario";
+		return FORMULARIO;
 	}
 
 	@PostMapping("novo")
 	public String novo(@Valid RequisicaoNovoPedido requisicao, BindingResult result) {
 		if (result.hasErrors()) {
-			return "pedido/formulario";
+			return FORMULARIO;
 		}
 		
-		String username = SecurityContextHolder.getContext().getAuthentication().getName();
-		User user = userRepository.findByUsername(username);
-		
-		Pedido pedido = requisicao.toPedido();
-		pedido.setUser(user);
-		pedidoRepository.save(pedido);
-		return "redirect:/home";
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		if (auth != null) {
+			String username = auth.getName();
+			User user = userRepository.findByUsername(username);
+			
+			Pedido pedido = requisicao.toPedido();
+			pedido.setUser(user);
+			pedidoRepository.save(pedido);
+			return "redirect:/home";
+		}
+		// TODO é preciso tratar corretamente este caso
+		return FORMULARIO;
 	}
 }

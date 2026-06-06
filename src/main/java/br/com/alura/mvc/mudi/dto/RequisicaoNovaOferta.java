@@ -4,10 +4,9 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
-
 import br.com.alura.mvc.mudi.model.Oferta;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

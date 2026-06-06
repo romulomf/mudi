@@ -3,7 +3,6 @@ package br.com.alura.mvc.mudi.controller;
 import java.security.Principal;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -15,18 +14,15 @@ import org.springframework.web.context.annotation.SessionScope;
 import br.com.alura.mvc.mudi.model.Pedido;
 import br.com.alura.mvc.mudi.model.StatusPedido;
 import br.com.alura.mvc.mudi.repository.PedidoRepository;
+import lombok.RequiredArgsConstructor;
 
+@RequiredArgsConstructor
 @Controller
 @RequestMapping("/usuario")
 @SessionScope
 public class UsuarioController {
 
-	@Autowired
-	private PedidoRepository pedidoRepository;
-
-	public UsuarioController() {
-		// construtor padrão
-	}
+	private final PedidoRepository pedidoRepository;
 	
 	@GetMapping("pedido")
 	public String home(Model model, Principal principal) {
@@ -36,7 +32,7 @@ public class UsuarioController {
 	}
 
 	@GetMapping("pedido/{status}")
-	public String porStatus(@PathVariable("status") String status, Model model, Principal principal) {
+	public String porStatus(@PathVariable String status, Model model, Principal principal) {
 		List<Pedido> pedidos = pedidoRepository.findByStatusAndUser(StatusPedido.valueOf(status.toUpperCase()), principal.getName());
 		model.addAttribute("pedidos", pedidos);
 		model.addAttribute("status", status);

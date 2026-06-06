@@ -1,5 +1,4 @@
 version: '3.9'
-
 services:
   mudi-database:
     image: mariadb:latest
@@ -10,7 +9,5 @@ services:
       MYSQL_USER: mudi
       MYSQL_PASSWORD: mudi
     network_mode: bridge
-    ports:
-      - "3306:3306"
     volumes:
       - ./data:/var/lib/mysql

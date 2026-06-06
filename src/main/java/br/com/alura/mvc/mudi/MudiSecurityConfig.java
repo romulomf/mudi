@@ -27,9 +27,9 @@ public class MudiSecurityConfig {
 	}
 
 	@Bean
-	SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+	SecurityFilterChain filterChain(HttpSecurity http) {
 		return http.authorizeHttpRequests(requests -> requests
-			.antMatchers("/home/**").permitAll()
+			.requestMatchers("/home/**").permitAll()
 			.anyRequest().authenticated())
 			.formLogin(form -> form.loginPage("/login").loginProcessingUrl("/login").defaultSuccessUrl("/usuario/pedido", true).permitAll())
 			.logout(logout -> logout.logoutUrl("/logout").logoutSuccessUrl("/home").permitAll())
@@ -38,17 +38,14 @@ public class MudiSecurityConfig {
 	}
 
 	@Bean
-	AuthenticationManager authManager(HttpSecurity http, BCryptPasswordEncoder passwordEncoder, @Autowired DataSource dataSource) throws Exception {
-		return http.getSharedObject(AuthenticationManagerBuilder.class)
-					.jdbcAuthentication()
-					.dataSource(dataSource)
-					.passwordEncoder(passwordEncoder)
-				.and()
-					.build();
+	AuthenticationManager authManager(HttpSecurity http, BCryptPasswordEncoder passwordEncoder, @Autowired DataSource dataSource) {
+		AuthenticationManagerBuilder authManager = http.getSharedObject(AuthenticationManagerBuilder.class);
+		authManager.jdbcAuthentication().dataSource(dataSource).passwordEncoder(passwordEncoder);
+		return authManager.build();
 	}
 
 	@Bean
 	WebSecurityCustomizer webSecurityCustomizer() {
-		return web -> web.debug(false).ignoring().antMatchers("/login/**");
+		return web -> web.debug(false).ignoring().requestMatchers("/login/**");
 	}
 }
