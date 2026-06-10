@@ -71,7 +71,7 @@ public class Pedido {
 	private User user;
 
 	@JsonIgnore
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "PEDIDO", fetch = FetchType.LAZY)
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "pedido", fetch = FetchType.LAZY)
 	private List<Oferta> ofertas;
 
 	public synchronized StatusPedido getStatus() {
